@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="skillf" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.;Initial Catalog=skillf;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="skillfConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.acceptances" Member="acceptances">
+    <Type Name="acceptance">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="detail" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="dead_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="cost" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="work_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="user_acceptance" Member="user" ThisKey="user_id" OtherKey="id" Type="user" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ambiguity_user_work" Member="ambiguity_user_works">
+    <Type Name="ambiguity_user_work">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="work_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ambiguity_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="ambiguity_ambiguity_user_work" Member="ambiguity" ThisKey="ambiguity_id" OtherKey="id" Type="ambiguity" IsForeignKey="true" />
+      <Association Name="user_ambiguity_user_work" Member="user" ThisKey="user_id" OtherKey="id" Type="user" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="work1_ambiguity_user_work" Member="work" ThisKey="work_id" OtherKey="id" Type="work" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ambiguitys" Member="ambiguities">
+    <Type Name="ambiguity">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="ambiguity_ambiguity_user_work" Member="ambiguity_user_works" ThisKey="id" OtherKey="ambiguity_id" Type="ambiguity_user_work" />
+    </Type>
+  </Table>
+  <Table Name="dbo.applicants" Member="applicants">
+    <Type Name="applicant">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="work_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="detail" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="dead_time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="cost" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="user_applicant" Member="user" ThisKey="user_id" OtherKey="id" Type="user" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="work1_applicant" Member="work" ThisKey="work_id" OtherKey="id" Type="work" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.course_user" Member="course_users">
+    <Type Name="course_user">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="created_at" Type="System.Data.Linq.Binary" DbType="rowversion" CanBeNull="true" IsVersion="true" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="course_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="course_course_user" Member="course" ThisKey="course_id" OtherKey="id" Type="course" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="user_course_user" Member="user" ThisKey="user_id" OtherKey="id" Type="user" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.courses" Member="courses">
+    <Type Name="course">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="department_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="course_course_user" Member="course_users" ThisKey="id" OtherKey="course_id" Type="course_user" />
+      <Association Name="course_work1" Member="works" ThisKey="id" OtherKey="course_id" Type="work" />
+      <Association Name="department_course" Member="department" ThisKey="department_id" OtherKey="id" Type="department" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.departments" Member="departments">
+    <Type Name="department">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.Data.Linq.Binary" DbType="rowversion" CanBeNull="true" IsVersion="true" />
+      <Association Name="department_course" Member="courses" ThisKey="id" OtherKey="department_id" Type="course" />
+    </Type>
+  </Table>
+  <Table Name="dbo.password_resets" Member="password_resets">
+    <Type Name="password_reset">
+      <Column Name="email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="token" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="created_at" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.users" Member="users">
+    <Type Name="user">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="VarChar(60) NOT NULL" CanBeNull="false" />
+      <Column Name="remember_token" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Association Name="user_acceptance" Member="acceptances" ThisKey="id" OtherKey="user_id" Type="acceptance" />
+      <Association Name="user_ambiguity_user_work" Member="ambiguity_user_works" ThisKey="id" OtherKey="user_id" Type="ambiguity_user_work" />
+      <Association Name="user_applicant" Member="applicants" ThisKey="id" OtherKey="user_id" Type="applicant" />
+      <Association Name="user_course_user" Member="course_users" ThisKey="id" OtherKey="user_id" Type="course_user" />
+      <Association Name="user_work1" Member="works" ThisKey="id" OtherKey="user_id" Type="work" />
+    </Type>
+  </Table>
+  <Table Name="dbo.worklog" Member="worklogs">
+    <Type Name="worklog">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="subject" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="detail" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="status" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="dead_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="course_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="type" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.works" Member="works">
+    <Type Name="work">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="subject" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="detail" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="status" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="dead_time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="course_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Approve" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="work1_ambiguity_user_work" Member="ambiguity_user_works" ThisKey="id" OtherKey="work_id" Type="ambiguity_user_work" />
+      <Association Name="work1_applicant" Member="applicants" ThisKey="id" OtherKey="work_id" Type="applicant" />
+      <Association Name="course_work1" Member="course" ThisKey="course_id" OtherKey="id" Type="course" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="user_work1" Member="user" ThisKey="user_id" OtherKey="id" Type="user" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+</Database>
